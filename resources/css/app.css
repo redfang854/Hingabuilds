@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --color-bg: #1f1f1f;
+    --color-surface: #363636;
+    --color-surface-alt: #2c2c2c;
+    --color-surface-raised: #3d3d3d;
+    --color-leaf: #467434;
+    --color-leaf-hover: #51863c;
+    --color-tangerine: #f58f20;
+    --color-tangerine-hover: #ff9d36;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--color-bg);
+        font-family: var(--font-body);
+    }
+}
+
+@layer utilities {
+    .font-display {
+        font-family: var(--font-sans);
+    }
+
+    .font-mono {
+        font-family: var(--font-mono);
+    }
+
+    .wallpaper-layer {
+        background-image: url('/images/doodle-wallpaper.webp');
+        background-size: 700px;
+        background-repeat: repeat;
+        opacity: 0.15;
+    }
+
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    /* ---- Smoked glass system ---- */
+    /* Dark, restrained glass — smoked office glass, not frosted ice.
+       Wallpaper should stay faintly visible through it. */
+
+    .glass-nav {
+        background: rgba(30, 30, 30, 0.65);
+        backdrop-filter: blur(20px) saturate(115%);
+        -webkit-backdrop-filter: blur(20px) saturate(115%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-card {
+        background: rgba(54, 54, 54, 0.28);
+        backdrop-filter: blur(16px) saturate(115%);
+        -webkit-backdrop-filter: blur(16px) saturate(115%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.45),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .glass-card:hover {
+        background: rgba(54, 54, 54, 0.35);
+        border-color: rgba(245, 143, 32, 0.25);
+        transform: translateY(-4px);
+    }
+
+    .glass-hero {
+        background: rgba(54, 54, 54, 0.28);
+        backdrop-filter: blur(18px) saturate(115%);
+        -webkit-backdrop-filter: blur(18px) saturate(115%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.45),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-input {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    .grain-overlay {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        opacity: 0.025;
+        mix-blend-mode: overlay;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .glass-card {
+        transition: none;
+    }
+
+    .glass-card:hover {
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
