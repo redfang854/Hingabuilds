@@ -42,7 +42,6 @@
     }
 
     .wallpaper-layer {
-        background-image: url('/images/doodle-wallpaper.webp');
         background-size: 700px;
         background-repeat: repeat;
         opacity: 0.15;

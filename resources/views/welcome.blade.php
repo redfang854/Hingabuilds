@@ -17,7 +17,7 @@
     <body class="bg-[var(--color-bg)] text-white antialiased">
 
         {{-- Fixed doodle wallpaper texture layer --}}
-        <div class="fixed inset-0 wallpaper-layer pointer-events-none z-0"></div>
+        <div class="fixed inset-0 wallpaper-layer pointer-events-none z-0" style="background-image: url('{{ asset('images/doodle-wallpaper.webp') }}');"></div>
         <div class="fixed inset-0 grain-overlay pointer-events-none z-0"></div>
 
         {{-- Ambient accent glow, kept subtle --}}
