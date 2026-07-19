@@ -67,8 +67,10 @@
 
                         <p class="text-lg sm:text-xl text-white/70 max-w-2xl leading-relaxed mb-10 text-balance">
                             Full-stack software engineer building production systems in
-                            <span class="text-white">Laravel</span> and <span class="text-white">React/TypeScript</span>,
-                            with a formal background in <span class="text-white">Information Security</span>.
+                            Laravel and React/TypeScript,
+                            holding a
+                            <button type="button" onclick="openDegreeModal()"
+                                class="font-bold hover:text-[var(--color-tangerine)] transition-colors cursor-pointer">Bachelor of Science in Information Security and Forensics</button>.
                             Currently rebuilding a live commercial POS platform from the ground up.
                         </p>
 
@@ -91,6 +93,8 @@
                             <span>nairobi, kenya</span>
                             <span>bsc information security &amp; forensics — kca university</span>
                             <span>junior software engineer @ terra softworks</span>
+                            <a href="tel:+254797250532" class="hover:text-white/60 transition-colors">+254 797 250 532</a>
+                            <a href="mailto:hingabayo@gmail.com" class="hover:text-white/60 transition-colors">hingabayo@gmail.com</a>
                         </div>
                     </div>
 
@@ -109,7 +113,7 @@
             </section>
 
             {{-- ============ ABOUT ============ --}}
-            <section id="about" class="px-6 py-24 border-t" style="border-color: rgba(255,255,255,0.06);">
+            <section id="about" class="px-6 py-24 border-t scroll-mt-16" style="border-color: rgba(255,255,255,0.06);">
                 <div class="max-w-6xl mx-auto">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-8">~/about</div>
 
@@ -151,7 +155,7 @@
             </section>
 
             {{-- ============ PROJECTS ============ --}}
-            <section id="projects" class="px-6 py-24 border-t" style="border-color: rgba(255,255,255,0.06);">
+            <section id="projects" class="px-6 py-24 border-t scroll-mt-16" style="border-color: rgba(255,255,255,0.06);">
                 <div class="max-w-6xl mx-auto">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-2">~/projects</div>
                     <h2 class="font-display font-semibold text-3xl sm:text-4xl mb-12">Selected work</h2>
@@ -271,7 +275,7 @@
             </section>
 
             {{-- ============ SKILLS ============ --}}
-            <section id="skills" class="px-6 py-24 border-t" style="border-color: rgba(255,255,255,0.06);">
+            <section id="skills" class="px-6 py-24 border-t scroll-mt-16" style="border-color: rgba(255,255,255,0.06);">
                 <div class="max-w-6xl mx-auto">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-2">~/skills</div>
                     <h2 class="font-display font-semibold text-3xl sm:text-4xl mb-12">Toolbox</h2>
@@ -303,7 +307,7 @@
             </section>
 
             {{-- ============ CONTACT / FOOTER ============ --}}
-            <section id="contact" class="px-6 py-24 border-t" style="border-color: rgba(255,255,255,0.06);">
+            <section id="contact" class="px-6 py-24 border-t scroll-mt-16" style="border-color: rgba(255,255,255,0.06);">
                 <div class="max-w-6xl mx-auto text-center">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-4">~/contact</div>
                     <h2 class="font-display font-semibold text-3xl sm:text-5xl mb-6 text-balance">
@@ -312,13 +316,25 @@
                     <p class="text-white/60 max-w-xl mx-auto mb-10">
                         Open to new opportunities. The fastest way to reach me is email.
                     </p>
-                    <a href="mailto:hingabayo@gmail.com"
-                       class="font-mono text-base px-8 py-4 rounded inline-block font-medium transition-colors"
-                       style="background: var(--color-tangerine); color: #1f1f1f;"
-                       onmouseover="this.style.background='var(--color-tangerine-hover)'"
-                       onmouseout="this.style.background='var(--color-tangerine)'">
-                        hingabayo@gmail.com
-                    </a>
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        <a href="mailto:hingabayo@gmail.com"
+                           class="font-mono text-base px-8 py-4 rounded inline-block font-medium transition-colors"
+                           style="background: var(--color-tangerine); color: #1f1f1f;"
+                           onmouseover="this.style.background='var(--color-tangerine-hover)'"
+                           onmouseout="this.style.background='var(--color-tangerine)'">
+                            hingabayo@gmail.com
+                        </a>
+                        <a href="tel:+254797250532"
+                           class="font-mono text-base px-8 py-4 rounded inline-block font-medium text-white/80 hover:text-white border transition-colors"
+                           style="border-color: rgba(255,255,255,0.18);">
+                            +254 797 250 532
+                        </a>
+                        <a href="https://www.linkedin.com/in/brian-hinga-9608ab364/" target="_blank" rel="noopener"
+                           class="font-mono text-base px-8 py-4 rounded inline-block font-medium text-white/80 hover:text-white border transition-colors"
+                           style="border-color: rgba(255,255,255,0.18);">
+                            linkedin
+                        </a>
+                    </div>
                 </div>
             </section>
 
@@ -327,6 +343,7 @@
                     <span>&copy; {{ date('Y') }} Brian Hinga Njoroge</span>
                     <div class="flex items-center gap-6">
                         <a href="https://github.com/redfang854" target="_blank" rel="noopener" class="hover:text-white/60 transition-colors">github</a>
+                        <a href="https://www.linkedin.com/in/brian-hinga-9608ab364/" target="_blank" rel="noopener" class="hover:text-white/60 transition-colors">linkedin</a>
                         <a href="mailto:hingabayo@gmail.com" class="hover:text-white/60 transition-colors">email</a>
                         <span>nairobi, kenya</span>
                     </div>
@@ -334,5 +351,36 @@
             </footer>
 
         </div>
+
+        {{-- ============ DEGREE CERTIFICATE MODAL ============ --}}
+        <div id="degree-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-8" style="background: rgba(15,15,15,0.75); backdrop-filter: blur(4px);" onclick="if(event.target === this) closeDegreeModal()">
+            <div class="glass-card rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col" style="background: rgba(44,44,44,0.92);">
+                <div class="flex items-center justify-between px-6 py-4 border-b" style="border-color: rgba(255,255,255,0.08);">
+                    <span class="font-mono text-sm text-white/70">bsc information security &amp; forensics — kca university</span>
+                    <button type="button" onclick="closeDegreeModal()" aria-label="Close" class="text-white/50 hover:text-white transition-colors font-mono text-xl leading-none">&times;</button>
+                </div>
+                <div class="overflow-auto p-4 sm:p-6">
+                    <img src="{{ asset('images/degree-certificate.webp') }}" alt="Brian Hinga Njoroge — Bachelor of Science in Information Security and Forensics degree certificate, KCA University" class="w-full h-auto rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openDegreeModal() {
+                const modal = document.getElementById('degree-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeDegreeModal() {
+                const modal = document.getElementById('degree-modal');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') closeDegreeModal();
+            });
+        </script>
     </body>
 </html>
