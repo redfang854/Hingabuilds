@@ -89,26 +89,79 @@
                 {{-- Screenshots --}}
                 <section class="mb-16">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-6">// screenshots</div>
-                    <div class="grid gap-6">
-                        <div class="glass-card rounded-xl overflow-hidden">
-                            <img src="/images/apex/apex-1.webp" alt="APEX Formula 1 dashboard showing live driver and constructor standings" class="w-full block">
-                            <p class="font-mono text-xs text-white/40 px-5 py-3">Formula 1 &mdash; live drivers' and constructors' championship standings</p>
+
+                    @php
+                        $apexShots = [
+                            ['src' => 'apex-5.webp', 'alt' => 'APEX football dashboard showing live Premier League, La Liga, and Serie A standings', 'caption' => 'Football &mdash; live standings and fixtures across Europe\'s top five leagues'],
+                            ['src' => 'apex-6.webp', 'alt' => 'APEX rugby dashboard showing Six Nations, URC, and Premiership standings', 'caption' => 'Rugby &mdash; Six Nations, URC, and Premiership coverage'],
+                            ['src' => 'apex-7.webp', 'alt' => 'APEX WRC dashboard showing 2026 driver standings and rally calendar', 'caption' => 'WRC &mdash; 2026 driver standings and rally calendar'],
+                            ['src' => 'apex-9.webp', 'alt' => 'APEX WRC dashboard scrolled to full driver standings and manufacturers table', 'caption' => 'WRC &mdash; full standings table down to the manufacturers\' championship'],
+                            ['src' => 'apex-8.webp', 'alt' => 'APEX admin CMS panel for editing hero, season recap, and story content', 'caption' => 'Admin CMS &mdash; editing hero, season recap, and story content per sport'],
+                        ];
+                    @endphp
+
+                    <div id="apex-carousel" class="glass-card rounded-xl overflow-hidden">
+                        <div class="relative w-full" style="aspect-ratio: 818 / 720;">
+                            @foreach ($apexShots as $i => $shot)
+                                <img src="/images/apex/{{ $shot['src'] }}" alt="{{ $shot['alt'] }}"
+                                     data-slide="{{ $i }}"
+                                     class="apex-slide absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 {{ $i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none' }}">
+                            @endforeach
                         </div>
-                        <div class="grid sm:grid-cols-2 gap-6">
-                            <div class="glass-card rounded-xl overflow-hidden">
-                                <img src="/images/apex/apex-3.webp" alt="APEX football dashboard showing Premier League standings" class="w-full block">
-                                <p class="font-mono text-xs text-white/40 px-5 py-3">Football &mdash; live league tables across five leagues + Champions League</p>
+                        <div class="flex items-center justify-between gap-4 px-5 py-3">
+                            <p class="font-mono text-xs text-white/40" id="apex-caption">{!! $apexShots[0]['caption'] !!}</p>
+                            <div class="flex gap-1.5 shrink-0">
+                                @foreach ($apexShots as $i => $shot)
+                                    <button type="button" data-dot="{{ $i }}" aria-label="Show screenshot {{ $i + 1 }}"
+                                            class="apex-dot w-1.5 h-1.5 rounded-full transition-colors"
+                                            style="background: {{ $i === 0 ? 'var(--color-tangerine)' : 'rgba(255,255,255,0.2)' }};"></button>
+                                @endforeach
                             </div>
-                            <div class="glass-card rounded-xl overflow-hidden">
-                                <img src="/images/apex/apex-4.webp" alt="APEX teams and squads browser" class="w-full block">
-                                <p class="font-mono text-xs text-white/40 px-5 py-3">Teams &amp; squads &mdash; full rosters and form guides</p>
-                            </div>
-                        </div>
-                        <div class="glass-card rounded-xl overflow-hidden">
-                            <img src="/images/apex/apex-2.webp" alt="APEX sign-in modal with Google and email authentication via Supabase" class="w-full block">
-                            <p class="font-mono text-xs text-white/40 px-5 py-3">Auth &mdash; Supabase-backed sign-in, Google or email</p>
                         </div>
                     </div>
+                    <p class="font-mono text-xs text-white/30 px-1 mt-2">click the dots to browse &mdash; football, rugby, WRC, and the admin CMS behind them all</p>
+
+                    <script>
+                        (function () {
+                            var captions = @json(array_column($apexShots, 'caption'));
+                            var slides = document.querySelectorAll('#apex-carousel .apex-slide');
+                            var dots = document.querySelectorAll('#apex-carousel .apex-dot');
+                            var captionEl = document.getElementById('apex-caption');
+                            var active = 0;
+                            var timer;
+
+                            function show(i) {
+                                active = i;
+                                slides.forEach(function (el, idx) {
+                                    el.classList.toggle('opacity-100', idx === i);
+                                    el.classList.toggle('opacity-0', idx !== i);
+                                    el.classList.toggle('pointer-events-none', idx !== i);
+                                });
+                                dots.forEach(function (el, idx) {
+                                    el.style.background = idx === i ? 'var(--color-tangerine)' : 'rgba(255,255,255,0.2)';
+                                });
+                                captionEl.innerHTML = captions[i];
+                            }
+
+                            function next() {
+                                show((active + 1) % slides.length);
+                            }
+
+                            function restart() {
+                                clearInterval(timer);
+                                timer = setInterval(next, 4500);
+                            }
+
+                            dots.forEach(function (dot) {
+                                dot.addEventListener('click', function () {
+                                    show(parseInt(dot.dataset.dot, 10));
+                                    restart();
+                                });
+                            });
+
+                            restart();
+                        })();
+                    </script>
                 </section>
 
                 <p class="text-white/40 text-sm">
