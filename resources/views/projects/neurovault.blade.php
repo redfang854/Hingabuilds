@@ -42,10 +42,15 @@
                     CodeIgniter 3 codebase into a Laravel 13 REST API with a React 18/TypeScript frontend.
                 </p>
 
-                <div class="flex flex-wrap gap-2 mb-16">
+                <div class="flex flex-wrap gap-2 mb-6">
                     @foreach (['Laravel 13', 'React 18', 'TypeScript', 'Sanctum', 'Spatie RBAC', 'MySQL', 'Zustand'] as $tag)
                         <span class="font-mono text-xs px-2.5 py-1 rounded border text-white/50" style="border-color: rgba(255,255,255,0.12);">{{ $tag }}</span>
                     @endforeach
+                </div>
+
+                <div class="flex items-center gap-2 mb-16 font-mono text-xs text-white/40">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full" style="background: var(--color-tangerine); box-shadow: 0 0 6px var(--color-tangerine);"></span>
+                    <span class="font-bold">Currently running locally during final QA &mdash; deployment write-up coming soon.</span>
                 </div>
 
                 {{-- Why rebuild --}}
