@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="lg:col-span-2 flex justify-center lg:justify-end">
-                        <div class="relative w-full max-w-sm">
+                        <div class="relative w-full max-w-md">
                             <div class="absolute inset-0 rounded-2xl" style="background: radial-gradient(ellipse at center, rgba(245,143,32,0.15), transparent 70%); filter: blur(24px);"></div>
                             <img src="/images/profile.webp" alt="Brian Hinga Njoroge"
                                  class="relative w-full rounded-2xl border"
