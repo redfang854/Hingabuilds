@@ -28,7 +28,7 @@
 
             {{-- ============ NAV ============ --}}
             <header class="fixed top-0 inset-x-0 z-50 glass-nav">
-                <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+                <nav class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
                     <a href="#top" class="font-mono text-sm text-white/90 tracking-tight">
                         <span class="text-[var(--color-tangerine)]">~</span>/brian-hinga
                     </a>
@@ -48,7 +48,7 @@
 
             {{-- ============ HERO ============ --}}
             <section id="top" class="min-h-screen flex items-center px-6 pt-16">
-                <div class="max-w-6xl mx-auto w-full py-20">
+                <div class="max-w-[1600px] mx-auto w-full py-20">
                 <div class="glass-hero rounded-3xl p-8 sm:p-12 grid lg:grid-cols-5 gap-12 items-center">
 
                     <div class="lg:col-span-3">
@@ -114,7 +114,7 @@
 
             {{-- ============ ABOUT ============ --}}
             <section id="about" class="px-6 py-24 border-t scroll-mt-16" style="border-color: rgba(255,255,255,0.06);">
-                <div class="max-w-6xl mx-auto">
+                <div class="max-w-[1600px] mx-auto">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-8">~/about</div>
 
                     <div class="grid lg:grid-cols-5 gap-12">
@@ -156,7 +156,7 @@
 
             {{-- ============ PROJECTS ============ --}}
             <section id="projects" class="px-6 py-24 border-t scroll-mt-16" style="border-color: rgba(255,255,255,0.06);">
-                <div class="max-w-6xl mx-auto">
+                <div class="max-w-[1600px] mx-auto">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-2">~/projects</div>
                     <h2 class="font-display font-semibold text-3xl sm:text-4xl mb-12">Selected work</h2>
 
@@ -276,7 +276,7 @@
 
             {{-- ============ SKILLS ============ --}}
             <section id="skills" class="px-6 py-24 border-t scroll-mt-16" style="border-color: rgba(255,255,255,0.06);">
-                <div class="max-w-6xl mx-auto">
+                <div class="max-w-[1600px] mx-auto">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-2">~/skills</div>
                     <h2 class="font-display font-semibold text-3xl sm:text-4xl mb-12">Toolbox</h2>
 
@@ -308,7 +308,7 @@
 
             {{-- ============ CONTACT / FOOTER ============ --}}
             <section id="contact" class="px-6 py-24 border-t scroll-mt-16" style="border-color: rgba(255,255,255,0.06);">
-                <div class="max-w-6xl mx-auto text-center">
+                <div class="max-w-[1600px] mx-auto text-center">
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-4">~/contact</div>
                     <h2 class="font-display font-semibold text-3xl sm:text-5xl mb-6 text-balance">
                         Let's build something that has to work.
@@ -339,7 +339,7 @@
             </section>
 
             <footer class="px-6 py-8 border-t" style="border-color: rgba(255,255,255,0.06);">
-                <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-white/30">
+                <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-white/30">
                     <span>&copy; {{ date('Y') }} Brian Hinga Njoroge</span>
                     <div class="flex items-center gap-6">
                         <a href="https://github.com/redfang854" target="_blank" rel="noopener" class="hover:text-white/60 transition-colors">github</a>

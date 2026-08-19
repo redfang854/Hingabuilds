@@ -94,6 +94,10 @@
                             authentication traits for role-based scenarios.</span>
                         </li>
                     </ul>
+                    <p class="font-mono text-xs text-white/30 mt-6">
+                        note: all data referenced above (products, sales, customers) comes from a seeded/staging
+                        data dump used for development and testing &mdash; not real production or customer data.
+                    </p>
                 </section>
 
                 {{-- Performance --}}
@@ -120,84 +124,6 @@
                         Zustand, a barcode-driven ISBN lookup with external API fallback, in-app notifications,
                         and role-aware navigation that adapts to what a given staff member is permitted to do.
                     </p>
-                </section>
-
-                {{-- Screenshots --}}
-                <section class="mb-16">
-                    <div class="font-mono text-sm text-[var(--color-tangerine)] mb-6">// screenshots</div>
-
-                    @php
-                        $nvShots = [
-                            ['src' => 'neurovault-1.webp', 'alt' => 'NeuroVault dashboard showing store metrics, daily sales chart, and top categories', 'caption' => 'Dashboard &mdash; store metrics, daily sales, and category breakdowns at a glance'],
-                            ['src' => 'neurovault-2.webp', 'alt' => 'NeuroVault POS terminal with items added to cart', 'caption' => 'POS terminal &mdash; barcode/name search, live cart, and Zustand-managed state'],
-                            ['src' => 'neurovault-3.webp', 'alt' => 'NeuroVault payment modal with cash payment applied', 'caption' => 'Checkout &mdash; multi-method payment (cash, M-Pesa, e-voucher)'],
-                            ['src' => 'neurovault-4.webp', 'alt' => 'NeuroVault payment modal mid-way through adding a split M-Pesa payment', 'caption' => 'Split-tender payments &mdash; combine cash, M-Pesa, and e-vouchers on one sale'],
-                            ['src' => 'neurovault-5.webp', 'alt' => 'NeuroVault sign-in screen with glassmorphism styling', 'caption' => 'Auth &mdash; Sanctum-backed sign-in with the light-mode parchment theme'],
-                        ];
-                    @endphp
-
-                    <div id="nv-carousel" class="glass-card rounded-xl overflow-hidden">
-                        <div class="relative w-full" style="aspect-ratio: 1854 / 1006;">
-                            @foreach ($nvShots as $i => $shot)
-                                <img src="/images/neurovault/{{ $shot['src'] }}" alt="{{ $shot['alt'] }}"
-                                     data-slide="{{ $i }}"
-                                     class="nv-slide absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 {{ $i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none' }}">
-                            @endforeach
-                        </div>
-                        <div class="flex items-center justify-between gap-4 px-5 py-3">
-                            <p class="font-mono text-xs text-white/40" id="nv-caption">{!! $nvShots[0]['caption'] !!}</p>
-                            <div class="flex gap-1.5 shrink-0">
-                                @foreach ($nvShots as $i => $shot)
-                                    <button type="button" data-dot="{{ $i }}" aria-label="Show screenshot {{ $i + 1 }}"
-                                            class="nv-dot w-1.5 h-1.5 rounded-full transition-colors"
-                                            style="background: {{ $i === 0 ? 'var(--color-tangerine)' : 'rgba(255,255,255,0.2)' }};"></button>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                    <p class="font-mono text-xs text-white/30 px-1 mt-2">click the dots to browse &mdash; dashboard, POS, checkout, and sign-in</p>
-
-                    <script>
-                        (function () {
-                            var captions = @json(array_column($nvShots, 'caption'));
-                            var slides = document.querySelectorAll('#nv-carousel .nv-slide');
-                            var dots = document.querySelectorAll('#nv-carousel .nv-dot');
-                            var captionEl = document.getElementById('nv-caption');
-                            var active = 0;
-                            var timer;
-
-                            function show(i) {
-                                active = i;
-                                slides.forEach(function (el, idx) {
-                                    el.classList.toggle('opacity-100', idx === i);
-                                    el.classList.toggle('opacity-0', idx !== i);
-                                    el.classList.toggle('pointer-events-none', idx !== i);
-                                });
-                                dots.forEach(function (el, idx) {
-                                    el.style.background = idx === i ? 'var(--color-tangerine)' : 'rgba(255,255,255,0.2)';
-                                });
-                                captionEl.innerHTML = captions[i];
-                            }
-
-                            function next() {
-                                show((active + 1) % slides.length);
-                            }
-
-                            function restart() {
-                                clearInterval(timer);
-                                timer = setInterval(next, 4500);
-                            }
-
-                            dots.forEach(function (dot) {
-                                dot.addEventListener('click', function () {
-                                    show(parseInt(dot.dataset.dot, 10));
-                                    restart();
-                                });
-                            });
-
-                            restart();
-                        })();
-                    </script>
                 </section>
 
             </article>
