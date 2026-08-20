@@ -28,23 +28,51 @@
 
             {{-- ============ NAV ============ --}}
             <header class="fixed top-0 inset-x-0 z-50 glass-nav">
-                <nav class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
-                    <a href="#top" class="font-mono text-sm text-white/90 tracking-tight">
+                <nav class="w-full px-6 sm:px-10 h-16 grid grid-cols-[1fr_auto_1fr] items-center">
+                    <a href="#top" class="justify-self-start font-mono text-sm text-white/90 tracking-tight">
                         <span class="text-[var(--color-tangerine)]">~</span>/brian-hinga
                     </a>
-                    <div class="hidden md:flex items-center gap-8 font-mono text-[13px] text-white/60">
+                    <div class="hidden md:flex items-center gap-[90px] font-mono text-[13px] text-white/60 justify-self-center">
                         <a href="#about" class="hover:text-white transition-colors">about</a>
                         <a href="#projects" class="hover:text-white transition-colors">projects</a>
                         <a href="#skills" class="hover:text-white transition-colors">skills</a>
                         <a href="#contact" class="hover:text-white transition-colors">contact</a>
                     </div>
                     <a href="mailto:hingabayo@gmail.com"
-                       class="font-mono text-[13px] px-4 py-2 rounded border transition-colors"
+                       class="justify-self-end font-mono text-[13px] px-4 py-2 rounded border transition-colors"
                        style="border-color: var(--color-tangerine); color: var(--color-tangerine);">
                         get in touch
                     </a>
                 </nav>
             </header>
+
+            {{-- ============ MOBILE BOTTOM NAV ============ --}}
+            <nav class="md:hidden fixed bottom-0 inset-x-0 z-50 border-t" style="background: var(--color-bg); border-color: rgba(255,255,255,0.08);">
+                <div class="w-full px-2 h-16 grid grid-cols-4 items-center text-white/60">
+                    <a href="#about" aria-label="About" class="flex items-center justify-center hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" style="width:24px;height:24px;flex-shrink:0;">
+                            <circle cx="12" cy="8" r="3.5"></circle>
+                            <path d="M4.5 20c1.4-3.6 4.3-5.5 7.5-5.5s6.1 1.9 7.5 5.5"></path>
+                        </svg>
+                    </a>
+                    <a href="#projects" aria-label="Projects" class="flex items-center justify-center hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" style="width:24px;height:24px;flex-shrink:0;">
+                            <path d="M3.5 7.5h5l1.8 2.2h9.2a1 1 0 0 1 1 1V17a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-9.5a1 1 0 0 1 1-1Z"></path>
+                        </svg>
+                    </a>
+                    <a href="#skills" aria-label="Skills" class="flex items-center justify-center hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" style="width:24px;height:24px;flex-shrink:0;">
+                            <path d="M8.5 8 4.5 12l4 4"></path>
+                            <path d="M15.5 8l4 4-4 4"></path>
+                        </svg>
+                    </a>
+                    <a href="#contact" aria-label="Contact" class="flex items-center justify-center hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" style="width:24px;height:24px;flex-shrink:0;">
+                            <path d="M6.5 3.5h3l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5v3a1.5 1.5 0 0 1-1.6 1.5A16 16 0 0 1 5 6.1 1.5 1.5 0 0 1 6.5 3.5Z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </nav>
 
             {{-- ============ HERO ============ --}}
             <section id="top" class="min-h-screen flex items-center px-6 pt-16">
@@ -243,7 +271,7 @@
                             </div>
                             <div class="mt-auto">
                                 <a href="{{ route('projects.apex') }}" class="font-mono text-sm inline-flex items-center gap-2 transition-colors" style="color: var(--color-tangerine);">
-                                    see it in action &rarr;
+                                    read the write-up &rarr;
                                 </a>
                             </div>
                         </div>
@@ -338,7 +366,7 @@
                 </div>
             </section>
 
-            <footer class="px-6 py-8 border-t" style="border-color: rgba(255,255,255,0.06);">
+            <footer class="px-6 py-8 pb-24 md:pb-8 border-t" style="border-color: rgba(255,255,255,0.06);">
                 <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-white/30">
                     <span>&copy; {{ date('Y') }} Brian Hinga Njoroge</span>
                     <div class="flex items-center gap-6">

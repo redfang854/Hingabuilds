@@ -12,7 +12,7 @@
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
     --color-bg: #1f1f1f;
-    --color-surface: #363636;
+    --color-surface: #282b2a;
     --color-surface-alt: #2c2c2c;
     --color-surface-raised: #3d3d3d;
     --color-leaf: #467434;
@@ -56,16 +56,12 @@
        Wallpaper should stay faintly visible through it. */
 
     .glass-nav {
-        background: rgba(30, 30, 30, 0.65);
-        backdrop-filter: blur(20px) saturate(115%);
-        -webkit-backdrop-filter: blur(20px) saturate(115%);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--color-bg);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .glass-card {
-        background: rgba(54, 54, 54, 0.28);
-        backdrop-filter: blur(16px) saturate(115%);
-        -webkit-backdrop-filter: blur(16px) saturate(115%);
+        background: var(--color-surface);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-top: 1px solid rgba(255, 255, 255, 0.12);
         box-shadow:
@@ -75,15 +71,13 @@
     }
 
     .glass-card:hover {
-        background: rgba(54, 54, 54, 0.35);
+        background: var(--color-surface-raised);
         border-color: rgba(245, 143, 32, 0.25);
         transform: translateY(-4px);
     }
 
     .glass-hero {
-        background: rgba(54, 54, 54, 0.28);
-        backdrop-filter: blur(18px) saturate(115%);
-        -webkit-backdrop-filter: blur(18px) saturate(115%);
+        background: var(--color-surface);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-top: 1px solid rgba(255, 255, 255, 0.12);
         box-shadow:

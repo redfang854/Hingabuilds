@@ -13,7 +13,7 @@
     </head>
     <body class="bg-[var(--color-bg)] text-white antialiased">
 
-        <div class="fixed inset-0 wallpaper-layer pointer-events-none z-0"></div>
+        <div class="fixed inset-0 wallpaper-layer pointer-events-none z-0" style="background-image: url('{{ asset('images/doodle-wallpaper.webp') }}');"></div>
         <div class="fixed inset-0 grain-overlay pointer-events-none z-0"></div>
         <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none z-0"
              style="background: radial-gradient(ellipse at center, rgba(70,116,52,0.06), transparent 70%);"></div>
@@ -21,7 +21,7 @@
         <div class="relative z-10">
 
             <header class="fixed top-0 inset-x-0 z-50 glass-nav">
-                <nav class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
+                <nav class="w-full px-6 sm:px-10 h-16 flex items-center justify-between">
                     <a href="{{ url('/') }}" class="font-mono text-sm text-white/90 tracking-tight">
                         <span class="text-[var(--color-tangerine)]">~</span>/brian-hinga
                     </a>
@@ -174,12 +174,12 @@
                         ];
                     @endphp
 
-                    <div id="nv-carousel" class="glass-card rounded-xl overflow-hidden">
-                        <div class="relative w-full" style="aspect-ratio: 1851 / 1004;">
+                    <div id="nv-carousel" class="glass-card rounded-xl overflow-hidden mx-auto" style="width: min(100%, 1000px);">
+                        <div class="relative w-full" style="aspect-ratio: 16 / 9; background: rgba(0,0,0,0.25);">
                             @foreach ($nvShots as $i => $shot)
                                 <img src="/images/neurovault/{{ $shot['src'] }}" alt="{{ $shot['alt'] }}"
                                      data-slide="{{ $i }}"
-                                     class="nv-slide absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 {{ $i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none' }}">
+                                     class="nv-slide absolute inset-0 w-full h-full object-contain transition-opacity duration-500 {{ $i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none' }}">
                             @endforeach
                         </div>
                         <div class="flex items-center justify-between gap-4 px-5 py-3">

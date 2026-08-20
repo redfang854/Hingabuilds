@@ -13,7 +13,7 @@
     </head>
     <body class="bg-[var(--color-bg)] text-white antialiased">
 
-        <div class="fixed inset-0 wallpaper-layer pointer-events-none z-0"></div>
+        <div class="fixed inset-0 wallpaper-layer pointer-events-none z-0" style="background-image: url('{{ asset('images/doodle-wallpaper.webp') }}');"></div>
         <div class="fixed inset-0 grain-overlay pointer-events-none z-0"></div>
         <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none z-0"
              style="background: radial-gradient(ellipse at center, rgba(245,143,32,0.08), transparent 70%);"></div>
@@ -21,7 +21,7 @@
         <div class="relative z-10">
 
             <header class="fixed top-0 inset-x-0 z-50 glass-nav">
-                <nav class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+                <nav class="w-full px-6 sm:px-10 h-16 flex items-center justify-between">
                     <a href="{{ url('/') }}" class="font-mono text-sm text-white/90 tracking-tight">
                         <span class="text-[var(--color-tangerine)]">~</span>/brian-hinga
                     </a>
@@ -29,7 +29,7 @@
                 </nav>
             </header>
 
-            <article class="max-w-4xl mx-auto px-6 pt-32 pb-24">
+            <article class="max-w-[1600px] mx-auto px-6 pt-32 pb-24">
 
                 <div class="flex items-center gap-3 mb-6">
                     <span class="font-mono text-xs px-2.5 py-1 rounded-full" style="background: rgba(245,143,32,0.15); color: var(--color-tangerine);">live in production</span>
@@ -43,8 +43,10 @@
                     harder problems I've solved, below.
                 </p>
 
+              <div class="flex flex-col gap-8">
+
                 {{-- Case study 1: OR-join bug --}}
-                <section class="glass-card mb-16 rounded-xl p-7">
+                <section class="glass-card mb-0 rounded-xl p-7">
                     <div class="font-mono text-xs text-white/30 mb-2">case study &mdash; e-commerce</div>
                     <h2 class="font-display font-semibold text-2xl mb-4">The 1.46 billion row query</h2>
                     <p class="text-white/70 leading-relaxed mb-4">
@@ -67,7 +69,7 @@
                 </section>
 
                 {{-- Case study 2: cart ordering --}}
-                <section class="glass-card mb-16 rounded-xl p-7">
+                <section class="glass-card mb-0 rounded-xl p-7">
                     <div class="font-mono text-xs text-white/30 mb-2">case study &mdash; pos</div>
                     <h2 class="font-display font-semibold text-2xl mb-4">A JavaScript object key bug, in-store</h2>
                     <p class="text-white/70 leading-relaxed mb-4">
@@ -88,7 +90,7 @@
                 </section>
 
                 {{-- Case study 3: e-voucher / M-Pesa --}}
-                <section class="glass-card mb-16 rounded-xl p-7">
+                <section class="glass-card mb-0 rounded-xl p-7">
                     <div class="font-mono text-xs text-white/30 mb-2">case study &mdash; payments</div>
                     <h2 class="font-display font-semibold text-2xl mb-4">The e-voucher flow, end to end</h2>
                     <p class="text-white/70 leading-relaxed mb-4">
@@ -109,7 +111,7 @@
                 </section>
 
                 {{-- Case study 4: performance audit --}}
-                <section class="glass-card mb-16 rounded-xl p-7">
+                <section class="glass-card mb-0 rounded-xl p-7">
                     <div class="font-mono text-xs text-white/30 mb-2">case study &mdash; performance</div>
                     <h2 class="font-display font-semibold text-2xl mb-4">A performance audit across checkout and catalog</h2>
                     <p class="text-white/70 leading-relaxed mb-4">
@@ -133,7 +135,7 @@
                 </section>
 
                 {{-- Case study 5: negative stock bug --}}
-                <section class="glass-card mb-16 rounded-xl p-7">
+                <section class="glass-card mb-0 rounded-xl p-7">
                     <div class="font-mono text-xs text-white/30 mb-2">case study &mdash; data integrity</div>
                     <h2 class="font-display font-semibold text-2xl mb-4">A stock adjustment that failed silently, then went negative</h2>
                     <p class="text-white/70 leading-relaxed mb-4">
@@ -158,7 +160,7 @@
                 </section>
 
                 {{-- Case study 6: CI / testing --}}
-                <section class="glass-card mb-16 rounded-xl p-7">
+                <section class="glass-card mb-0 rounded-xl p-7">
                     <div class="font-mono text-xs text-white/30 mb-2">case study &mdash; testing &amp; reliability</div>
                     <h2 class="font-display font-semibold text-2xl mb-4">Building CI pipelines instead of hoping nothing breaks</h2>
                     <p class="text-white/70 leading-relaxed mb-4">
@@ -179,8 +181,10 @@
                     </div>
                 </section>
 
+                </div>
+
                 {{-- Also shipped --}}
-                <section class="mb-4">
+                <section class="mb-4 mt-16">
                     <h3 class="font-display font-semibold text-lg mb-5 text-white/90">Also shipped</h3>
                     <div class="grid sm:grid-cols-3 gap-8">
                         <div>
@@ -217,7 +221,7 @@
             </article>
 
             <footer class="px-6 py-8 border-t" style="border-color: rgba(255,255,255,0.06);">
-                <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-white/30">
+                <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-white/30">
                     <span>&copy; {{ date('Y') }} Brian Hinga Njoroge</span>
                     <div class="flex items-center gap-6">
                         <a href="https://github.com/redfang854" target="_blank" rel="noopener" class="hover:text-white/60 transition-colors">github</a>

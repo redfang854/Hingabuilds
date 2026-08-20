@@ -13,7 +13,7 @@
     </head>
     <body class="bg-[var(--color-bg)] text-white antialiased">
 
-        <div class="fixed inset-0 wallpaper-layer pointer-events-none z-0"></div>
+        <div class="fixed inset-0 wallpaper-layer pointer-events-none z-0" style="background-image: url('{{ asset('images/doodle-wallpaper.webp') }}');"></div>
         <div class="fixed inset-0 grain-overlay pointer-events-none z-0"></div>
         <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none z-0"
              style="background: radial-gradient(ellipse at center, rgba(70,116,52,0.08), transparent 70%);"></div>
@@ -21,7 +21,7 @@
         <div class="relative z-10">
 
             <header class="fixed top-0 inset-x-0 z-50 glass-nav">
-                <nav class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+                <nav class="w-full px-6 sm:px-10 h-16 flex items-center justify-between">
                     <a href="{{ url('/') }}" class="font-mono text-sm text-white/90 tracking-tight">
                         <span class="text-[var(--color-tangerine)]">~</span>/brian-hinga
                     </a>
@@ -29,7 +29,7 @@
                 </nav>
             </header>
 
-            <article class="max-w-4xl mx-auto px-6 pt-32 pb-24">
+            <article class="max-w-[1600px] mx-auto px-6 pt-32 pb-24">
 
                 <div class="flex items-center gap-3 mb-6">
                     <span class="font-mono text-xs px-2.5 py-1 rounded-full" style="background: rgba(70,116,52,0.18); color: var(--color-leaf);">live</span>
@@ -52,38 +52,68 @@
                 </a>
 
                 <div class="flex flex-wrap gap-2 mb-16">
-                    @foreach (['React', 'Vite', 'Neon Postgres', 'Supabase', 'Groq API', 'Vercel'] as $tag)
+                    @foreach (['React', 'Vite', 'Neon Postgres', 'Supabase', 'Groq API', 'Upstash Redis', 'Vercel'] as $tag)
                         <span class="font-mono text-xs px-2.5 py-1 rounded border text-white/50" style="border-color: rgba(255,255,255,0.12);">{{ $tag }}</span>
                     @endforeach
                 </div>
 
-                {{-- Overview --}}
+                {{-- Why built --}}
                 <section class="mb-16">
-                    <div class="font-mono text-sm text-[var(--color-tangerine)] mb-4">// overview</div>
+                    <div class="font-mono text-sm text-[var(--color-tangerine)] mb-4">// the problem</div>
+                    <p class="text-white/70 leading-relaxed max-w-4xl">
+                        I follow six sports &mdash; Football, F1, MMA, Boxing, Rugby, and WRC &mdash; and every one
+                        of them lives on a different site with a different layout and no shared login. APEX started
+                        as a way to fix that for myself: one dashboard, one account, live standings and fixtures for
+                        everything I follow, designed, built, and deployed solo.
+                    </p>
+                </section>
+
+                {{-- Architecture --}}
+                <section class="mb-16">
+                    <div class="font-mono text-sm text-[var(--color-tangerine)] mb-4">// architecture</div>
                     <ul class="space-y-4 text-white/70 leading-relaxed">
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
-                            <span><span class="text-white">Six sports in one dashboard</span> &mdash; live standings,
-                            fixtures, and results for Football, F1, MMA/UFC, Boxing, Rugby, and WRC, pulled from the
-                            Jolpica F1 and football-data.org APIs via serverless proxies.</span>
+                            <span><span class="text-white">Six sports, six different data problems.</span> Football
+                            and F1 pull live standings, fixtures, and squads from football-data.org and the Jolpica
+                            F1 API through Vercel serverless proxies, which keep the API keys off the client and let
+                            me apply caching per sport. MMA runs on the Cito API. Boxing has no reliable free
+                            live-data source for title pictures and rankings, so that page runs on a dataset I curate
+                            and update by hand &mdash; it's the one section without a "live data" badge, deliberately,
+                            so it's honest about what's live and what isn't.</span>
                         </li>
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
                             <span><span class="text-white">A historical data layer</span> on Neon PostgreSQL holding
-                            over 79,000 matches (52,649 football, 26,380 F1), used to power standings and
-                            season-long stats.</span>
+                            over 79,000 matches (52,649 football, 26,380 F1), used to power standings and season-long
+                            stats independently of live API rate limits.</span>
                         </li>
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
-                            <span><span class="text-white">Supabase</span> handles authentication and a real-time
-                            chat feature, letting signed-in users discuss live events as they happen.</span>
+                            <span><span class="text-white">Supabase</span> handles authentication (including Google
+                            OAuth), Row Level Security policies on user data, and a real-time chat feature that lets
+                            signed-in users discuss live events as they happen.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span style="color: var(--color-leaf);">&gt;</span>
+                            <span><span class="text-white">Upstash Redis</span> rate-limits the serverless proxies so
+                            a burst of traffic on one sport can't exhaust the API quota for the other five.</span>
                         </li>
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
                             <span><span class="text-white">AI-generated driver bios</span> via the Groq API, adding
                             written context around F1 drivers without hand-authoring every profile.</span>
                         </li>
+                        <li class="flex gap-3">
+                            <span style="color: var(--color-leaf);">&gt;</span>
+                            <span><span class="text-white">An admin CMS</span> for editing the hero, season recap,
+                            and story content per sport without touching code or redeploying.</span>
+                        </li>
                     </ul>
+                    <p class="font-mono text-xs text-white/30 mt-6">
+                        note: an .env file briefly ended up in a public commit early on. I rotated every exposed key
+                        within the hour and added a pre-commit check to catch it going forward.
+                    </p>
                 </section>
 
                 {{-- Screenshots --}}
@@ -92,20 +122,24 @@
 
                     @php
                         $apexShots = [
-                            ['src' => 'apex-5.webp', 'alt' => 'APEX football dashboard showing live Premier League, La Liga, and Serie A standings', 'caption' => 'Football &mdash; live standings and fixtures across Europe\'s top five leagues'],
-                            ['src' => 'apex-6.webp', 'alt' => 'APEX rugby dashboard showing Six Nations, URC, and Premiership standings', 'caption' => 'Rugby &mdash; Six Nations, URC, and Premiership coverage'],
-                            ['src' => 'apex-7.webp', 'alt' => 'APEX WRC dashboard showing 2026 driver standings and rally calendar', 'caption' => 'WRC &mdash; 2026 driver standings and rally calendar'],
-                            ['src' => 'apex-9.webp', 'alt' => 'APEX WRC dashboard scrolled to full driver standings and manufacturers table', 'caption' => 'WRC &mdash; full standings table down to the manufacturers\' championship'],
+                            ['src' => 'apex-10.webp', 'alt' => 'APEX football dashboard showing live Premier League standings', 'caption' => 'Football &mdash; live Premier League standings, season recap, and league leaders'],
+                            ['src' => 'apex-11.webp', 'alt' => 'APEX football dashboard showing upcoming Premier League fixtures', 'caption' => 'Football &mdash; upcoming fixtures with kickoff times and dates'],
+                            ['src' => 'apex-13.webp', 'alt' => 'APEX Arsenal FC squad modal showing full player roster by position', 'caption' => 'Football &mdash; full squad rosters, drilled down by position, nationality, and age'],
+                            ['src' => 'apex-14.webp', 'alt' => 'APEX Formula 1 dashboard showing live drivers\' and constructors\' championship standings', 'caption' => 'F1 &mdash; live drivers\' and constructors\' championships, plus a countdown to the next race'],
+                            ['src' => 'apex-15.webp', 'alt' => 'APEX MMA dashboard showing recent UFC results and the next fight card', 'caption' => 'MMA &mdash; recent results, title fights, and the next UFC card'],
+                            ['src' => 'apex-17.webp', 'alt' => 'APEX boxing dashboard showing undisputed champions and recent title fights', 'caption' => 'Boxing &mdash; undisputed champions and recent title fights (curated, not live)'],
+                            ['src' => 'apex-18.webp', 'alt' => 'APEX rugby dashboard showing Six Nations, URC, and Premiership standings', 'caption' => 'Rugby &mdash; Six Nations, URC, and Premiership standings'],
+                            ['src' => 'apex-19.webp', 'alt' => 'APEX WRC dashboard showing 2026 driver standings and rally calendar', 'caption' => 'WRC &mdash; 2026 driver standings and the full rally calendar'],
                             ['src' => 'apex-8.webp', 'alt' => 'APEX admin CMS panel for editing hero, season recap, and story content', 'caption' => 'Admin CMS &mdash; editing hero, season recap, and story content per sport'],
                         ];
                     @endphp
 
-                    <div id="apex-carousel" class="glass-card rounded-xl overflow-hidden">
-                        <div class="relative w-full" style="aspect-ratio: 818 / 720;">
+                    <div id="apex-carousel" class="glass-card rounded-xl overflow-hidden mx-auto" style="width: min(100%, 1000px);">
+                        <div class="relative w-full" style="aspect-ratio: 16 / 9; background: rgba(0,0,0,0.25);">
                             @foreach ($apexShots as $i => $shot)
                                 <img src="/images/apex/{{ $shot['src'] }}" alt="{{ $shot['alt'] }}"
                                      data-slide="{{ $i }}"
-                                     class="apex-slide absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 {{ $i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none' }}">
+                                     class="apex-slide absolute inset-0 w-full h-full object-contain transition-opacity duration-500 {{ $i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none' }}">
                             @endforeach
                         </div>
                         <div class="flex items-center justify-between gap-4 px-5 py-3">
@@ -119,7 +153,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="font-mono text-xs text-white/30 px-1 mt-2">click the dots to browse &mdash; football, rugby, WRC, and the admin CMS behind them all</p>
+                    <p class="font-mono text-xs text-white/30 px-1 mt-2">click the dots to browse &mdash; all six sports, the squad drill-down, and the admin CMS behind them all</p>
 
                     <script>
                         (function () {
@@ -172,7 +206,7 @@
             </article>
 
             <footer class="px-6 py-8 border-t" style="border-color: rgba(255,255,255,0.06);">
-                <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-white/30">
+                <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-white/30">
                     <span>&copy; {{ date('Y') }} Brian Hinga Njoroge</span>
                     <div class="flex items-center gap-6">
                         <a href="https://github.com/redfang854" target="_blank" rel="noopener" class="hover:text-white/60 transition-colors">github</a>
