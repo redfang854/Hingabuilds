@@ -16,9 +16,10 @@ My personal portfolio site — built with Laravel, styled as a dark, developer-f
   hinga-dev itself), Skills, Contact
 - **`/projects/neurovault`** — Architecture writeup and performance notes for an
   in-progress Laravel 13 + React/TypeScript POS rebuild
-- **`/projects/half-priced-books`** — Three case studies from a live e-commerce +
-  POS platform: a 1.46-billion-row SQL bug, a JavaScript object-key ordering bug,
-  and an end-to-end M-Pesa e-voucher flow
+- **`/projects/half-priced-books`** — Role, systems overview, ten case studies
+  (query performance, N+1/queue refactor, e-vouchers, POS M-Pesa STK push, stock
+  integrity, JS key ordering, CI, legacy-POS documentation & audit, PHP 5.6/8.x
+  compatibility, V2 architecture), a toolkit section and an also-shipped list
 - **`/projects/apex`** — Overview and screenshot gallery of a live multi-sport
   data dashboard
 
