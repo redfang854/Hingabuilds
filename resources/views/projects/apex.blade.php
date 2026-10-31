@@ -138,14 +138,18 @@
 
                     @php
                         $apexShots = [
-                            ['src' => 'apex-10.webp', 'alt' => 'APEX football dashboard showing live Premier League standings', 'caption' => 'Football &mdash; live Premier League standings and league leaders'],
-                            ['src' => 'apex-11.webp', 'alt' => 'APEX football dashboard showing upcoming Premier League fixtures', 'caption' => 'Football &mdash; upcoming fixtures with kickoff times and dates'],
-                            ['src' => 'apex-13.webp', 'alt' => 'APEX Arsenal FC squad modal showing full player roster by position', 'caption' => 'Football &mdash; full squad rosters, drilled down by position, nationality, and age'],
-                            ['src' => 'apex-14.webp', 'alt' => 'APEX Formula 1 dashboard showing live drivers\' and constructors\' championship standings', 'caption' => 'F1 &mdash; live drivers\' and constructors\' championships, plus a countdown to the next race'],
-                            ['src' => 'apex-15.webp', 'alt' => 'APEX MMA dashboard showing recent UFC results and the next fight card', 'caption' => 'MMA &mdash; recent results, title fights, and the next UFC card'],
-                            ['src' => 'apex-17.webp', 'alt' => 'APEX boxing dashboard showing undisputed champions and recent title fights', 'caption' => 'Boxing &mdash; world champions by division (snapshot, refreshed from Wikipedia)'],
-                            ['src' => 'apex-18.webp', 'alt' => 'APEX rugby dashboard showing Six Nations, URC, and Premiership standings', 'caption' => 'Rugby &mdash; Six Nations, URC, and Premiership standings'],
-                            ['src' => 'apex-19.webp', 'alt' => 'APEX WRC dashboard showing 2026 driver standings and rally calendar', 'caption' => 'WRC &mdash; driver standings and the full rally calendar'],
+                            ['src' => 'apex-20.webp', 'alt' => 'APEX football tab with Sports Recents headlines and league leaders', 'caption' => 'Football &mdash; latest BBC Sport headlines and the leader of each league'],
+                            ['src' => 'apex-21.webp', 'alt' => 'APEX Premier League standings table marked live data', 'caption' => 'Football &mdash; live Premier League standings'],
+                            ['src' => 'apex-22.webp', 'alt' => 'APEX Premier League fixtures list with kickoff times', 'caption' => 'Football &mdash; upcoming fixtures with kickoff times'],
+                            ['src' => 'apex-23.webp', 'alt' => 'APEX Arsenal squad modal with player photos grouped by position', 'caption' => 'Football &mdash; club squads with photos, filterable by position'],
+                            ['src' => 'apex-24.webp', 'alt' => 'APEX Arsenal form modal showing the last 10 results', 'caption' => 'Football &mdash; a club\'s last 10 results and form'],
+                            ['src' => 'apex-25.webp', 'alt' => 'APEX Formula 1 tab with headlines, next-race countdown and championship leaders', 'caption' => 'F1 &mdash; next-race countdown, championship leaders and headlines'],
+                            ['src' => 'apex-26.webp', 'alt' => 'APEX Formula 1 drivers\' and constructors\' championship standings', 'caption' => 'F1 &mdash; live drivers\' and constructors\' championships'],
+                            ['src' => 'apex-27.webp', 'alt' => 'APEX MMA tab with next UFC card countdown and recent results', 'caption' => 'MMA &mdash; next UFC card countdown, latest event and results'],
+                            ['src' => 'apex-28.webp', 'alt' => 'APEX boxing tab with unified champions and latest title changes', 'caption' => 'Boxing &mdash; unified champions and latest title changes'],
+                            ['src' => 'apex-29.webp', 'alt' => 'APEX boxer profile modal for Naoya Inoue showing record and belts', 'caption' => 'Boxing &mdash; fighter profile with record, KO rate and belts held'],
+                            ['src' => 'apex-30.webp', 'alt' => 'APEX rugby tab with Six Nations table and recent Premiership results', 'caption' => 'Rugby &mdash; Six Nations, URC and Premiership tables with recent results'],
+                            ['src' => 'apex-31.webp', 'alt' => 'APEX WRC tab with 2026 final driver standings and rally calendar', 'caption' => 'WRC &mdash; final driver standings and the 2026 rally calendar'],
                         ];
                     @endphp
 
