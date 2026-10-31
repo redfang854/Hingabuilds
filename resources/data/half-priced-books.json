@@ -1,0 +1,844 @@
+{
+ "groups": [
+  "Payments",
+  "Performance",
+  "Data integrity & bug fixes",
+  "Features",
+  "Engineering & reliability",
+  "Architecture, documentation & reporting"
+ ],
+ "items": [
+  {
+   "slug": "e-voucher-system",
+   "group": "Payments",
+   "title": "E-voucher system, end to end",
+   "system": "Storefront + POS",
+   "status": "shipped",
+   "summary": "Built e-vouchers from scratch across both systems: bought online with M-Pesa, synced into the POS, and redeemed online or at the till.",
+   "tools": [
+    "Laravel 10",
+    "CodeIgniter 3",
+    "M-Pesa Daraja",
+    "MySQL",
+    "PHPUnit"
+   ],
+   "problem": "The business wanted to sell digital vouchers that a customer could buy online and spend either on the website or in a branch. Neither system had a voucher concept that the other could understand.",
+   "work": [
+    "Worked through the design with the senior developer first. We decided to follow the path the existing checkout already used to record website sales in the POS, instead of inventing a second integration.",
+    "On the storefront: an e-voucher purchase flow paid with M-Pesa STK Push, and a dedicated redemption method in the checkout service so a voucher can pay for an online order.",
+    "On the POS: the e-voucher sales list, plus selling, validating and redeeming vouchers at the till.",
+    "One shared way of generating voucher numbers, so the same voucher has the same identity in both systems.",
+    "Closed a payment-integrity gap: the voucher deduction trusted an amount sent by the browser. It now uses the order total calculated on the server.",
+    "We decided that vouchers and gift cards used as payment are not counted as revenue. Otherwise the money would be counted twice: once when the voucher is bought and again when it is spent."
+   ],
+   "impact": "A complete, working voucher product across both channels, with server-side deductions and honest revenue figures. It is covered by 82 automated tests across the storefront and POS.",
+   "diff": [
+    [
+     "+",
+     "STK Push purchase → POS sync → online or in-store redemption"
+    ],
+    [
+     "+",
+     "deductions computed server-side"
+    ],
+    [
+     "+",
+     "vouchers & gift cards excluded from revenue"
+    ],
+    [
+     "+",
+     "82 automated tests"
+    ]
+   ]
+  },
+  {
+   "slug": "pos-mpesa-stk-push",
+   "group": "Payments",
+   "title": "M-Pesa STK Push at the till",
+   "system": "POS + Storefront",
+   "status": "in progress",
+   "summary": "Pushes M-Pesa payment requests from the POS to the customer's phone by reusing the website's existing Daraja callback.",
+   "tools": [
+    "CodeIgniter 3",
+    "Laravel 10",
+    "M-Pesa Daraja",
+    "jQuery"
+   ],
+   "problem": "At the till, M-Pesa payments were confirmed by looking at the customer's phone. The goal was to send the payment request straight to the customer's phone from the POS and have the money go to the branch where the cashier is logged in, without changing how the live website behaves.",
+   "cause": "Daraja sends payment results to a single registered callback URL, and the website already owned it.",
+   "work": [
+    "Design decision: POS requests use the website's existing callback instead of a separate public POS endpoint. The website recognises a request that came from the POS and forwards the result to the POS.",
+    "Delivered in two steps. Step one, in its own pull request: the \"customer has paid\" pop-up at the till, using the shared paybill.",
+    "Step two: route each payment to the paybill/till of the branch the cashier is logged into. This is waiting on each branch's Safaricom consumer key and secret.",
+    "The cashier enters the M-Pesa transaction code on the payment, which is saved with it. This was the fastest reliable option. Filling it in automatically from the callback is a possible later step."
+   ],
+   "impact": "M-Pesa payments at the till without touching the storefront's payment behaviour, and every M-Pesa sale traceable to its transaction.",
+   "diff": [
+    [
+     "+",
+     "one callback URL, routed by origin"
+    ],
+    [
+     "+",
+     "M-Pesa code saved on every POS M-Pesa payment"
+    ],
+    [
+     "~",
+     "per-branch paybill routing: waiting on branch credentials"
+    ]
+   ]
+  },
+  {
+   "slug": "storefront-mpesa-stk-push",
+   "group": "Payments",
+   "title": "M-Pesa STK Push on the storefront",
+   "system": "Storefront",
+   "status": "shipped",
+   "summary": "Daraja STK Push for online book orders and e-voucher purchases, with callbacks tested locally through ngrok.",
+   "tools": [
+    "Laravel 10",
+    "M-Pesa Daraja",
+    "ngrok",
+    "Laravel Queues"
+   ],
+   "problem": "Online customers needed to pay with M-Pesa from the checkout page, for both book orders and e-voucher purchases.",
+   "work": [
+    "Built the STK Push request and callback handling for both flows against Safaricom's Daraja API.",
+    "Daraja needs a public callback URL, so I tested callbacks locally through an ngrok tunnel before release.",
+    "As part of the performance work, moved the M-Pesa listener onto Laravel's queue so the checkout response no longer waits on the outbound call to the POS."
+   ],
+   "impact": "Customers pay from their phone at checkout. The same callback later became the single entry point for till payments too.",
+   "diff": [
+    [
+     "+",
+     "STK Push for orders and e-vouchers"
+    ],
+    [
+     "+",
+     "queued listener, non-blocking checkout"
+    ]
+   ]
+  },
+  {
+   "slug": "gift-cards-at-the-till",
+   "group": "Payments",
+   "title": "Gift cards in the POS payment flow",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "Integrated gift cards as a payment method at the till, using the same revenue rule as e-vouchers.",
+   "tools": [
+    "CodeIgniter 3",
+    "MySQL",
+    "jQuery"
+   ],
+   "problem": "Gift cards needed to work as a payment method in the POS sale flow alongside cash and M-Pesa.",
+   "work": [
+    "Integrated gift cards into the POS payment flow.",
+    "Applied the same accounting rule as e-vouchers: a gift card used as payment is not counted as new revenue."
+   ],
+   "impact": "One more payment method at the till, with sales reports that don't double-count prepaid value.",
+   "diff": [
+    [
+     "+",
+     "gift cards accepted as POS payment"
+    ],
+    [
+     "+",
+     "excluded from revenue"
+    ]
+   ]
+  },
+  {
+   "slug": "mpesa-pos-payment-option",
+   "group": "Payments",
+   "title": "M-Pesa as a POS payment option",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "Added M-Pesa as a selectable payment method at the till.",
+   "tools": [
+    "CodeIgniter 3",
+    "jQuery",
+    "MySQL"
+   ],
+   "problem": "Cashiers had no dedicated way to record an M-Pesa payment on a POS sale.",
+   "work": [
+    "Added M-Pesa as a payment option in the POS sale flow.",
+    "Restored the transaction-code input so the M-Pesa code is saved with the payment record."
+   ],
+   "impact": "M-Pesa sales are recorded as M-Pesa, not as cash, and can be matched to their transaction. This laid the groundwork for STK Push at the till.",
+   "diff": [
+    [
+     "+",
+     "M-Pesa payment method + saved transaction code"
+    ]
+   ]
+  },
+  {
+   "slug": "deals-and-listing-queries",
+   "group": "Performance",
+   "title": "The deals & listing query rewrite",
+   "system": "Storefront",
+   "status": "shipped",
+   "summary": "Rewrote an OR-join in the storefront's deals and book-listing queries that stopped MySQL from using its indexes.",
+   "tools": [
+    "MySQL",
+    "Laravel 10",
+    "Query profiling"
+   ],
+   "problem": "The storefront's deals and book-listing pages were slow.",
+   "cause": "<code>fetchBooks</code>, <code>fetchAllDeals</code> and <code>fetchDealsOfTheWeek</code> joined tables with an <code>OR</code> condition. Against a 72,000+ row product table, that stops MySQL from using an index, so every request compared huge numbers of row combinations.",
+   "work": [
+    "Profiled the queries to find the real cause instead of guessing.",
+    "Confirmed the OR-join was responsible, then rewrote the join in all three queries so MySQL can use its indexes again.",
+    "Kept the results each query returns the same. Only the way they are computed changed."
+   ],
+   "impact": "The three queries can use their indexes again, so the deals and listing pages no longer do a combinatorial join on every request.",
+   "diff": [
+    [
+     "-",
+     "OR-join forcing a combinatorial scan on every request"
+    ],
+    [
+     "+",
+     "rewritten join in fetchBooks, fetchAllDeals, fetchDealsOfTheWeek"
+    ]
+   ]
+  },
+  {
+   "slug": "checkout-and-catalogue-performance",
+   "group": "Performance",
+   "title": "Checkout & catalogue performance audit",
+   "system": "Storefront",
+   "status": "shipped",
+   "summary": "Removed N+1 queries from the shop, cart and checkout, added in-request caching, and moved slow work onto queues.",
+   "tools": [
+    "Laravel 10",
+    "Laravel Queues",
+    "MySQL",
+    "PHPUnit"
+   ],
+   "problem": "The shop page and checkout were slow, and checkout responses were held up by work the customer didn't need to wait for.",
+   "cause": "The shop page ran a separate warehouse-stock query for every product it showed, up to 48 round-trips per page. Checkout did the same for every cart item. The M-Pesa listener also called the POS API synchronously, and the confirmation email was sent inline.",
+   "work": [
+    "In <code>PosService</code>, replaced the per-product loops with single batched <code>WHERE id IN (...)</code> queries across the shop, cart and order-processing paths.",
+    "Added in-request caching for repeat lookups.",
+    "Moved the M-Pesa listener and the confirmation email onto Laravel's queue.",
+    "Kept the changes strictly to performance: no changes to business logic or structure."
+   ],
+   "impact": "Database round-trips per page dropped from up to 48 to a handful, and checkout responds without waiting on outbound HTTP or email. The changes are covered by the 71-test transfers & performance suite.",
+   "diff": [
+    [
+     "-",
+     "one query per product, up to 48 per page"
+    ],
+    [
+     "-",
+     "listener + email blocking checkout"
+    ],
+    [
+     "+",
+     "batched fetches, in-request cache, queued jobs"
+    ]
+   ]
+  },
+  {
+   "slug": "list-books-all-warehouses",
+   "group": "Performance",
+   "title": "List Books \"All Warehouses\" view",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "Fixed a POS view that loaded all 72,000+ products into the browser when \"All Warehouses\" was selected.",
+   "tools": [
+    "CodeIgniter 3",
+    "DataTables",
+    "MySQL"
+   ],
+   "problem": "Staff reported that List Books was very slow with \"All Warehouses\" selected.",
+   "cause": "That view loaded the entire catalogue, every row, into the browser at once.",
+   "work": [
+    "Changed the view so it no longer sends the whole catalogue to the browser in one go.",
+    "Included in the 13 July 2026 Technical Implementation Report, and confirmed working afterwards."
+   ],
+   "impact": "The view is usable again for staff checking stock across all branches.",
+   "diff": [
+    [
+     "-",
+     "72k rows loaded client-side"
+    ],
+    [
+     "+",
+     "fixed and confirmed working"
+    ]
+   ]
+  },
+  {
+   "slug": "stock-adjustment-negative-stock",
+   "group": "Data integrity & bug fixes",
+   "title": "Stock adjustment that failed silently, then went negative",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "Fixed adjustments that showed success but changed nothing, then added a floor so stock can't go below zero.",
+   "tools": [
+    "CodeIgniter 3",
+    "MySQL",
+    "DataTables"
+   ],
+   "problem": "Adjust Quantity showed a success message, but stock quantities didn't change.",
+   "cause": "The insert was failing silently on two <code>NOT NULL</code> columns the code never filled in. Fixing that revealed a worse bug: subtracting stock had no lower limit, so with overselling enabled a product could go negative. Nobody noticed because the DataTables view shows negative numbers as zero. One record was sitting at −9,998.",
+   "work": [
+    "Fixed the insert so every adjustment gets a proper reference.",
+    "Added a <code>max(0, ...)</code> floor to the subtraction path.",
+    "Corrected the bad record once its real quantity was confirmed."
+   ],
+   "impact": "Adjustments now save, stock can't go negative, and this bug became the reason for V2's \"no negative values\" schema rule.",
+   "diff": [
+    [
+     "-",
+     "silent insert failures"
+    ],
+    [
+     "-",
+     "record at −9,998"
+    ],
+    [
+     "+",
+     "reference on insert, max(0, ...) floor, record corrected"
+    ]
+   ]
+  },
+  {
+   "slug": "pos-cart-order",
+   "group": "Data integrity & bug fixes",
+   "title": "Scan order at the till (JavaScript key bug)",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "Cart items rearranged themselves because numeric object keys are re-sorted by JavaScript. Fixed with timestamp keys.",
+   "tools": [
+    "JavaScript",
+    "jQuery"
+   ],
+   "problem": "When starting a sale, items in the POS cart didn't stay in the order they were scanned.",
+   "cause": "The cart stored items in an object keyed by numeric product ID. JavaScript always lists integer-like keys (up to 2³²−2) in ascending order, no matter when they were added.",
+   "work": [
+    "Switched to timestamp-based keys. Millisecond timestamps are above that integer range, so JavaScript keeps them in the order they were added.",
+    "Added cache-busting to the POS's main script so branches don't keep running the old version after a release."
+   ],
+   "impact": "The cart shows items in the order they were scanned. Part of the 13 July 2026 report, confirmed working.",
+   "diff": [
+    [
+     "-",
+     "numeric product-ID keys, re-sorted by JS"
+    ],
+    [
+     "+",
+     "timestamp keys + cache-busted script"
+    ]
+   ]
+  },
+  {
+   "slug": "cart-not-clearing",
+   "group": "Data integrity & bug fixes",
+   "title": "Cart not clearing after a sale",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "The till cart stayed full after a completed or suspended sale. The cause was session flashdata expiring too early.",
+   "tools": [
+    "CodeIgniter 3",
+    "JavaScript"
+   ],
+   "problem": "After a completed or suspended sale, the cart wasn't cleared, so the next customer's sale started with the previous items still in it.",
+   "cause": "The signal to clear the cart relied on CodeIgniter session flashdata, which had expired before the page that needed it could read it.",
+   "work": [
+    "Traced it to the flashdata expiry and fixed the clear-cart flow for both completed and suspended sales.",
+    "Part of the 13 July 2026 report, confirmed working."
+   ],
+   "impact": "Each sale starts with an empty cart, which removes a real risk of charging a customer for someone else's items.",
+   "diff": [
+    [
+     "-",
+     "stale cart after completed/suspended sale"
+    ],
+    [
+     "+",
+     "cart reliably cleared"
+    ]
+   ]
+  },
+  {
+   "slug": "transfers-module",
+   "group": "Data integrity & bug fixes",
+   "title": "Stock transfers: correctness and usability",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "Fixed transfers that took stock from one warehouse without adding it to the other, and made the transfers screens usable.",
+   "tools": [
+    "CodeIgniter 3",
+    "MySQL",
+    "DataTables",
+    "PHPUnit"
+   ],
+   "problem": "Transfers between warehouses didn't always balance, and the transfer screens didn't show enough to identify a book.",
+   "work": [
+    "Fixed quantity-sync bugs where a transfer took stock from the source warehouse without adding it to the destination.",
+    "Added book name, ISBN and author columns and reworked the DataTable layout so staff can identify items quickly.",
+    "Covered warehouse transfers with automated tests (part of the 71-test suite).",
+    "While documenting the module, I also found and wrote up a separate bug: picking several destinations in one transfer only adds stock to the first one."
+   ],
+   "impact": "Branch stock stays consistent when books move between warehouses, and transfers are now protected by tests.",
+   "diff": [
+    [
+     "-",
+     "stock taken from source but not added at destination"
+    ],
+    [
+     "+",
+     "quantity sync fixed, identifying columns, tests"
+    ]
+   ]
+  },
+  {
+   "slug": "duplicate-listings-group-by",
+   "group": "Data integrity & bug fixes",
+   "title": "Duplicate book listings",
+   "system": "",
+   "status": "shipped",
+   "summary": "The same book appeared more than once in listings because of an incomplete GROUP BY.",
+   "tools": [
+    "MySQL"
+   ],
+   "problem": "Customers saw the same book listed more than once.",
+   "cause": "The listing query's GROUP BY didn't include all the columns it needed, so the same book could come back as several rows.",
+   "work": [
+    "Fixed the grouping so each book appears once."
+   ],
+   "impact": "Clean listings, one entry per book.",
+   "diff": [
+    [
+     "-",
+     "duplicate rows per warehouse"
+    ],
+    [
+     "+",
+     "one row per book"
+    ]
+   ]
+  },
+  {
+   "slug": "out-of-stock-aggregation",
+   "group": "Data integrity & bug fixes",
+   "title": "Out-of-stock status across warehouses",
+   "system": "",
+   "status": "shipped",
+   "summary": "A book's stock status now adds up stock across all warehouses instead of looking at just one.",
+   "tools": [
+    "MySQL"
+   ],
+   "problem": "Books could show as out of stock while copies were available in another branch.",
+   "work": [
+    "Changed the stock-status check to add up quantities across warehouses."
+   ],
+   "impact": "Customers see accurate availability and the shop no longer hides sellable stock.",
+   "diff": [
+    [
+     "+",
+     "stock status totalled across warehouses"
+    ]
+   ]
+  },
+  {
+   "slug": "isbn-checker",
+   "group": "Data integrity & bug fixes",
+   "title": "ISBN checker fixes + Google Books fallback",
+   "system": "POS",
+   "status": "in progress",
+   "summary": "Fixed the POS ISBN checker, and I'm adding Google Books as a fallback when ISBNdb has no record.",
+   "tools": [
+    "CodeIgniter 3",
+    "ISBNdb API",
+    "Google Books API"
+   ],
+   "problem": "Staff use the ISBN checker to pull book details when adding stock. Some lookups failed, and ISBNdb doesn't have every title.",
+   "work": [
+    "Fixed issues in the existing ISBN checker.",
+    "In progress: Google Books API as a fallback, called only when ISBNdb doesn't return the book, with the checker's interface left unchanged. Currently being tested locally."
+   ],
+   "impact": "Fewer manual entries when a title is missing from ISBNdb, with no extra paid service and no change for staff.",
+   "diff": [
+    [
+     "+",
+     "checker fixes shipped"
+    ],
+    [
+     "~",
+     "Google Books fallback: in local testing"
+    ]
+   ]
+  },
+  {
+   "slug": "storefront-search",
+   "group": "Data integrity & bug fixes",
+   "title": "Storefront search fixes",
+   "system": "Storefront",
+   "status": "shipped",
+   "summary": "Fixed search issues on the storefront.",
+   "tools": [
+    "Laravel 10",
+    "MySQL"
+   ],
+   "problem": "Search on the storefront wasn't returning the results customers expected.",
+   "work": [
+    "Fixed the storefront search issues that had been reported."
+   ],
+   "impact": "Customers can find books through search again.",
+   "diff": [
+    [
+     "+",
+     "search fixes"
+    ]
+   ]
+  },
+  {
+   "slug": "stock-a-library",
+   "group": "Features",
+   "title": "\"Stock a Library\" page + CMS",
+   "system": "Storefront",
+   "status": "shipped",
+   "summary": "A new storefront page and its admin CMS, built end to end.",
+   "tools": [
+    "Laravel 10",
+    "Blade",
+    "MySQL"
+   ],
+   "problem": "The business wanted a page promoting its library-stocking service that staff could update themselves.",
+   "work": [
+    "Built it end to end: the public page and the CMS behind it."
+   ],
+   "impact": "A new service is marketed on the site, and staff update its content without a developer.",
+   "diff": [
+    [
+     "+",
+     "page + CMS, built end to end"
+    ]
+   ]
+  },
+  {
+   "slug": "top-banner-cms",
+   "group": "Features",
+   "title": "CMS-editable top banner, deals & offers",
+   "system": "Storefront",
+   "status": "shipped",
+   "summary": "Moved the top banner and deals/offers copy from hardcoded text into the CMS.",
+   "tools": [
+    "Laravel 10",
+    "Blade",
+    "MySQL"
+   ],
+   "problem": "Changing the site banner or promotional copy needed a code change.",
+   "work": [
+    "Built a Top Banner CMS and made the deals and offers copy editable from the admin."
+   ],
+   "impact": "Marketing changes go live without a deployment.",
+   "diff": [
+    [
+     "+",
+     "banner + offers editable in CMS"
+    ]
+   ]
+  },
+  {
+   "slug": "feedback-widget",
+   "group": "Features",
+   "title": "Structured feedback widget",
+   "system": "Storefront",
+   "status": "shipped",
+   "summary": "Replaced an open text box with a structured feedback widget.",
+   "tools": [
+    "Laravel 10",
+    "JavaScript"
+   ],
+   "problem": "Free-text feedback was hard to sort and act on.",
+   "work": [
+    "Replaced the open text box with a structured feedback widget."
+   ],
+   "impact": "Feedback arrives in a form the business can actually review.",
+   "diff": [
+    [
+     "-",
+     "free-text box"
+    ],
+    [
+     "+",
+     "structured widget"
+    ]
+   ]
+  },
+  {
+   "slug": "kpi-dashboard",
+   "group": "Features",
+   "title": "KPI dashboard with year/duration filters",
+   "system": "",
+   "status": "shipped",
+   "summary": "Rebuilt the KPI dashboard with year and duration filters.",
+   "tools": [
+    "MySQL",
+    "JavaScript"
+   ],
+   "problem": "The dashboard couldn't be filtered by period.",
+   "work": [
+    "Rebuilt the KPI dashboard and added year and duration filters."
+   ],
+   "impact": "Management can compare performance across periods.",
+   "diff": [
+    [
+     "+",
+     "year / duration filters"
+    ]
+   ]
+  },
+  {
+   "slug": "whatsapp-click-tracking",
+   "group": "Features",
+   "title": "WhatsApp click tracking",
+   "system": "Storefront + POS",
+   "status": "shipped",
+   "summary": "Tracks clicks on the WhatsApp contact links so the business can see how often customers use that channel.",
+   "tools": [
+    "Laravel 10",
+    "CodeIgniter 3",
+    "JavaScript",
+    "MySQL"
+   ],
+   "problem": "The business had no data on how many customers contacted it through WhatsApp from the site.",
+   "work": [
+    "Added click tracking for the WhatsApp contact links, with changes in both the storefront and POS codebases."
+   ],
+   "impact": "Measurable data on a sales channel that was invisible before.",
+   "diff": [
+    [
+     "+",
+     "WhatsApp clicks recorded"
+    ]
+   ]
+  },
+  {
+   "slug": "ci-and-testing",
+   "group": "Engineering & reliability",
+   "title": "From no tests to CI on both codebases",
+   "system": "Storefront + POS",
+   "status": "shipped",
+   "summary": "PHPUnit in both codebases and four GitHub Actions workflows running 153 tests against a fresh MySQL 8.0 on every push.",
+   "tools": [
+    "PHPUnit",
+    "GitHub Actions",
+    "MySQL 8.0",
+    "Laravel 10",
+    "CodeIgniter 3"
+   ],
+   "problem": "Neither codebase had automated tests, so every change relied on manual checking against live systems.",
+   "work": [
+    "Set up PHPUnit in both codebases, including the CodeIgniter 3 POS, which has no built-in test tooling.",
+    "Added GitHub Actions workflows that start a fresh MySQL 8.0 database on every push.",
+    "Kept fast unit tests (pure logic, no database) separate from feature tests (real HTTP requests against a throwaway database).",
+    "Tests never touch live data, and they don't conflict with existing test files."
+   ],
+   "impact": "Four workflows, 153 tests (82 for e-vouchers, 71 for transfers and performance), and every merge checked automatically.",
+   "diff": [
+    [
+     "+",
+     "4 workflows, fresh MySQL 8.0 per run"
+    ],
+    [
+     "+",
+     "82 e-voucher tests"
+    ],
+    [
+     "+",
+     "71 transfers & performance tests"
+    ]
+   ]
+  },
+  {
+   "slug": "php-5-6-and-8-compatibility",
+   "group": "Engineering & reliability",
+   "title": "One codebase on PHP 5.6 and 8.3",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "Made the POS run on both production's PHP 5.6 and PHP 8.3 locally, without changing production.",
+   "tools": [
+    "PHP 5.6",
+    "PHP 8.3",
+    "CodeIgniter 3"
+   ],
+   "problem": "The POS runs on PHP 5.6 in production, but development happens on PHP 8.3, where parts of it failed with fatal errors.",
+   "cause": "Curly-brace string offsets (<code>$str{0}</code>) were removed in PHP 8, and the <code>mcrypt</code> extension was removed in PHP 7.2.",
+   "work": [
+    "Rewrote the offsets with the bracket syntax that works on both versions.",
+    "Added an mcrypt polyfill.",
+    "In the same pass, searched the codebase for hardcoded credentials."
+   ],
+   "impact": "The same code runs on both versions, which made local development and CI on a modern PHP possible.",
+   "diff": [
+    [
+     "-",
+     "fatal errors on PHP 8"
+    ],
+    [
+     "+",
+     "runs on 5.6 and 8.x"
+    ]
+   ]
+  },
+  {
+   "slug": "code-review-fixes",
+   "group": "Engineering & reliability",
+   "title": "Fixes from a senior code review",
+   "system": "Storefront + POS",
+   "status": "in progress",
+   "summary": "Working through the senior developer's review of both systems: payment recording, test-database safety, and a loyalty-points overwrite.",
+   "tools": [
+    "Laravel 10",
+    "CodeIgniter 3",
+    "PHPUnit"
+   ],
+   "problem": "A senior code review of the POS and storefront raised issues in payment recording and deductions, test-database safety, and a loyalty-points overwrite.",
+   "work": [
+    "Planning and fixing each issue, with a plan prepared for management.",
+    "Payment-related decision already made: e-vouchers and gift cards used as payment are not counted as revenue."
+   ],
+   "impact": "In progress.",
+   "diff": [
+    [
+     "~",
+     "payment recording & deductions"
+    ],
+    [
+     "~",
+     "test-database safety"
+    ],
+    [
+     "~",
+     "loyalty-points overwrite"
+    ]
+   ]
+  },
+  {
+   "slug": "platform-audit-fixes",
+   "group": "Engineering & reliability",
+   "title": "Platform audit fixes",
+   "system": "Storefront",
+   "status": "in progress",
+   "summary": "Working through the October 2026 platform audit of the storefront: security, performance and architecture.",
+   "tools": [
+    "Laravel 10",
+    "nginx",
+    "DigitalOcean"
+   ],
+   "problem": "An October 2026 audit of the storefront listed issues across security, performance and architecture.",
+   "work": [
+    "Working through the audit items myself, one change per commit."
+   ],
+   "impact": "In progress.",
+   "diff": [
+    [
+     "~",
+     "security · performance · architecture"
+    ]
+   ]
+  },
+  {
+   "slug": "pos-documentation-and-audit",
+   "group": "Architecture, documentation & reporting",
+   "title": "Documenting the legacy POS",
+   "system": "POS",
+   "status": "shipped",
+   "summary": "An 11-document system reference plus 60+ page-level references for a POS that had no documentation, and a backlog of bugs found along the way.",
+   "tools": [
+    "CodeIgniter 3",
+    "MySQL",
+    "pandoc",
+    "LaTeX",
+    "Markdown"
+   ],
+   "problem": "The POS had no documentation, so every change started with reading code.",
+   "work": [
+    "11-document system reference: database and ERD, models, controllers, views, config, core, libraries, migrations/hooks/helpers, a security audit of the standalone scripts, testing infrastructure, and a README/documentation map.",
+    "60+ page-level references across sales, quotes, purchases, transfers, people, system settings, reports and the shared header. Each one traces what the user does, through the controller and model, down to every table and column it touches, in order.",
+    "Bugs found along the way: audit-log calls with their arguments in the wrong order across several controllers; a multi-destination transfer that only adds stock to the first destination; reports whose table and export disagree; whole features built but unreachable from the UI.",
+    "Security issues by category: an injection risk, sensitive fields exposed to the page, and an update path with no integrity check. All were written up and reported internally."
+   ],
+   "impact": "A map of the codebase the team can work from, and a backlog of real bugs nobody had reported.",
+   "diff": [
+    [
+     "+",
+     "11 system documents"
+    ],
+    [
+     "+",
+     "60+ page references (Markdown → PDF)"
+    ]
+   ]
+  },
+  {
+   "slug": "v2-architecture",
+   "group": "Architecture, documentation & reporting",
+   "title": "Version 2 architecture proposal",
+   "system": "Storefront + POS",
+   "status": "proposal",
+   "summary": "Proposed merging both systems into one Laravel 13 application with a shared schema. Architecture, tool set, ERD and schema docs delivered to the CTO.",
+   "tools": [
+    "Laravel 13 (proposed)",
+    "PHP 8.4 (proposed)",
+    "MySQL 8.4",
+    "Docker",
+    "DigitalOcean"
+   ],
+   "problem": "Two codebases on different frameworks write to one database with no shared schema definition, which is how bugs like the −9,998 stock record get in.",
+   "work": [
+    "One Laravel 13 / PHP 8.4 application: POS and storefront code in separate namespaces, sharing base Eloquent models (Product, Sale, Customer, Warehouse), with a single migrations folder as the only source of truth for the schema.",
+    "Both front ends and every business process stay as they are. Only the backend and database change.",
+    "Stay on DigitalOcean's managed MySQL instead of running our own server, and prepare for MySQL 8.4, which I develop against locally in Docker next to 8.0.",
+    "Drop the unused legacy accounting tables, reuse the paid APIs we already have, and allow no negative values anywhere in the schema."
+   ],
+   "impact": "A concrete, costed path off the legacy stack with no change for users. Currently at proposal stage.",
+   "diff": [
+    [
+     "+",
+     "one app, one migrations folder, shared models"
+    ],
+    [
+     "~",
+     "proposal delivered to CTO"
+    ]
+   ]
+  },
+  {
+   "slug": "technical-reporting",
+   "group": "Architecture, documentation & reporting",
+   "title": "Technical & client reporting",
+   "system": "",
+   "status": "ongoing",
+   "summary": "Weekly technical reports to the CTO and plain-English reports for the client.",
+   "tools": [
+    "Technical writing",
+    "PDF"
+   ],
+   "problem": "Management and the client need to know what changed and why, at very different levels of detail.",
+   "work": [
+    "Weekly Activity Technical Report to the CTO: per issue, a status line, the problem, cause and findings, code changes, test files and commits.",
+    "Client-facing reports in plain English: one short paragraph per fix, with no code or jargon.",
+    "Example: the 13 July 2026 Technical Implementation Report covered four POS issues, all fixed and confirmed working."
+   ],
+   "impact": "Work is visible and traceable for both technical and non-technical readers.",
+   "diff": [
+    [
+     "+",
+     "weekly technical report"
+    ],
+    [
+     "+",
+     "plain-English client reports"
+    ]
+   ]
+  }
+ ]
+}

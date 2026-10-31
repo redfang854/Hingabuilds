@@ -227,17 +227,17 @@
                             </div>
                             <h3 class="font-display font-semibold text-2xl mb-3">Half Priced Books</h3>
                             <p class="text-white/65 leading-relaxed mb-5">
-                                Junior engineer on a live Laravel storefront and a legacy CodeIgniter 3 POS that
+                                Junior engineer on a live Laravel 10 storefront and a legacy CodeIgniter 3 POS that
                                 share a 72k-product database: M-Pesa payments, query performance, data-integrity
                                 fixes, CI from zero, a full documentation set, and the V2 architecture proposal.
                             </p>
                             <div class="rounded-md p-4 mb-5 font-mono text-xs" style="background: rgba(0,0,0,0.2);">
                                 <div class="text-white/40 mb-2">// SQL OR-join bug, deals &amp; listing queries</div>
-                                <div style="color: var(--color-tangerine);">&minus; ~1.46 billion row comparisons per request</div>
+                                <div style="color: var(--color-tangerine);">&minus; OR-join stopping MySQL from using its indexes</div>
                                 <div style="color: var(--color-leaf);">+ rewritten join logic, found via query profiling</div>
                             </div>
                             <div class="flex flex-wrap gap-2 mb-6">
-                                @foreach (['Laravel', 'CodeIgniter 3', 'MySQL', 'M-Pesa Daraja', 'PHPUnit', 'GitHub Actions'] as $tag)
+                                @foreach (['Laravel 10', 'CodeIgniter 3', 'MySQL', 'M-Pesa Daraja', 'PHPUnit', 'GitHub Actions'] as $tag)
                                     <span class="font-mono text-xs px-2.5 py-1 rounded border text-white/50" style="border-color: rgba(255,255,255,0.12);">{{ $tag }}</span>
                                 @endforeach
                             </div>

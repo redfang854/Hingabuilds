@@ -12,6 +12,10 @@ cd "$(dirname "$0")/.."
 OUT="${1:-../hinga-dev-static/static_export}"
 PORT=8765
 ROUTES=("/" "/projects/apex" "/projects/neurovault" "/projects/half-priced-books")
+# one detail page per Half Priced Books work item
+while IFS= read -r slug; do ROUTES+=("/projects/half-priced-books/$slug"); done < <(
+  python3 -c 'import json; [print(i["slug"]) for i in json.load(open("resources/data/half-priced-books.json"))["items"]]'
+)
 
 rm -f public/hot            # a stale hot file makes @vite() point at a dead dev server
 npm run build
