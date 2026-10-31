@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>APEX — Brian Hinga</title>
-        <meta name="description" content="APEX: a multi-sport data dashboard covering six sports with live API integrations, a historical match database, and AI-generated content.">
+        <meta name="description" content="APEX: a multi-sport dashboard for six sports, built on locked-down serverless API proxies, free-tier engineering, and a tested, documented codebase.">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=space-grotesk:500,600,700|inter:400,500,600|jetbrains-mono:400,500" rel="stylesheet" />
@@ -38,9 +38,10 @@
 
                 <h1 class="font-display font-semibold text-4xl sm:text-5xl mb-6 text-balance">APEX</h1>
                 <p class="text-xl text-white/70 leading-relaxed max-w-2xl mb-8 text-balance">
-                    A multi-sport data dashboard covering six sports &mdash; Football, F1, MMA/UFC, Boxing, Rugby,
-                    and WRC &mdash; built, deployed, and maintained solo, with live API integrations and a
-                    historical database spanning tens of thousands of matches.
+                    A multi-sport dashboard for six sports &mdash; Football, F1, MMA/UFC, Boxing, Rugby, and
+                    WRC &mdash; built, deployed, and maintained solo. The interesting part isn't the scoreboards:
+                    it's keeping API keys safe, staying inside free-tier limits, and being honest about where
+                    every number comes from.
                 </p>
 
                 <a href="https://sports-dashboard-redfang.vercel.app" target="_blank" rel="noopener"
@@ -52,7 +53,7 @@
                 </a>
 
                 <div class="flex flex-wrap gap-2 mb-16">
-                    @foreach (['React', 'Vite', 'Neon Postgres', 'Supabase', 'Groq API', 'Upstash Redis', 'Vercel'] as $tag)
+                    @foreach (['React 19', 'Vite', 'Vercel Functions', 'Neon Postgres', 'Upstash Redis', 'Vitest', 'GitHub Actions'] as $tag)
                         <span class="font-mono text-xs px-2.5 py-1 rounded border text-white/50" style="border-color: rgba(255,255,255,0.12);">{{ $tag }}</span>
                     @endforeach
                 </div>
@@ -62,9 +63,10 @@
                     <div class="font-mono text-sm text-[var(--color-tangerine)] mb-4">// the problem</div>
                     <p class="text-white/70 leading-relaxed max-w-4xl">
                         I follow six sports &mdash; Football, F1, MMA, Boxing, Rugby, and WRC &mdash; and every one
-                        of them lives on a different site with a different layout and no shared login. APEX started
-                        as a way to fix that for myself: one dashboard, one account, live standings and fixtures for
-                        everything I follow, designed, built, and deployed solo.
+                        of them lives on a different site with a different layout. APEX started as a way to fix
+                        that for myself: one fast page per sport with standings, results, fixtures and the latest
+                        headlines. The harder problem turned out to be the data: six sources, three of them with
+                        no free live API, all on free plans with tight limits.
                     </p>
                 </section>
 
@@ -74,46 +76,60 @@
                     <ul class="space-y-4 text-white/70 leading-relaxed">
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
-                            <span><span class="text-white">Six sports, six different data problems.</span> Football
-                            and F1 pull live standings, fixtures, and squads from football-data.org and the Jolpica
-                            F1 API through Vercel serverless proxies, which keep the API keys off the client and let
-                            me apply caching per sport. MMA runs on the Cito API. Boxing has no reliable free
-                            live-data source for title pictures and rankings, so that page runs on a dataset I curate
-                            and update by hand &mdash; it's the one section without a "live data" badge, deliberately,
-                            so it's honest about what's live and what isn't.</span>
+                            <span><span class="text-white">A React SPA with one URL per sport.</span> Each sport is its own route (<code class="font-mono text-sm">/f1</code>, <code class="font-mono text-sm">/boxing</code>&hellip;) and its own lazily loaded code chunk, so reloads and shared links land on the right page and the first download is just the shell (77&nbsp;KB gzipped).</span>
                         </li>
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
-                            <span><span class="text-white">A historical data layer</span> on Neon PostgreSQL holding
-                            over 79,000 matches (52,649 football, 26,380 F1), used to power standings and season-long
-                            stats independently of live API rate limits.</span>
+                            <span><span class="text-white">Serverless proxies that hold the keys.</span> football-data.org, API-Football and the Cito API are called through Vercel functions that add the key server-side. Each proxy forwards only an allow-list of endpoint shapes, rate-limits per IP with Upstash Redis, and caches at the edge &mdash; so the keys never reach the browser and a stranger can't use the site as a free relay for my quotas.</span>
                         </li>
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
-                            <span><span class="text-white">Supabase</span> handles authentication (including Google
-                            OAuth), Row Level Security policies on user data, and a real-time chat feature that lets
-                            signed-in users discuss live events as they happen.</span>
+                            <span><span class="text-white">Free-tier engineering.</span> Football data allows 10 requests a minute and squad data 100 a day. Edge caching, one shared request per league table, a single retry on rate limits, and a permanent per-browser cache for club matching keep the site inside those limits.</span>
                         </li>
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
-                            <span><span class="text-white">Upstash Redis</span> rate-limits the serverless proxies so
-                            a burst of traffic on one sport can't exhaust the API quota for the other five.</span>
+                            <span><span class="text-white">Honest data.</span> F1 and football are live; news comes from BBC Sport and Autosport RSS. WRC, boxing and rugby have no usable free live source, so they're snapshots refreshed from Wikipedia by a script that parses tables by column name, validates the result, and refuses to write anything suspicious. Every snapshot shows its date and turns into a warning if it goes stale; live views say &ldquo;unavailable&rdquo; instead of quietly showing old numbers.</span>
                         </li>
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
-                            <span><span class="text-white">AI-generated driver bios</span> via the Groq API, adding
-                            written context around F1 drivers without hand-authoring every profile.</span>
+                            <span><span class="text-white">A historical F1 layer</span> on Neon Postgres (26,000+ historical results) that powers each driver's career profile independently of the live API.</span>
                         </li>
                         <li class="flex gap-3">
                             <span style="color: var(--color-leaf);">&gt;</span>
-                            <span><span class="text-white">An admin CMS</span> for editing the hero, season recap,
-                            and story content per sport without touching code or redeploying.</span>
+                            <span><span class="text-white">No accounts, by design.</span> An earlier version had sign-in, a live chat and an admin CMS. I removed all three once they stopped earning their keep &mdash; no personal data to protect, about 185&nbsp;KB less JavaScript, and four fewer write endpoints.</span>
                         </li>
                     </ul>
                     <p class="font-mono text-xs text-white/30 mt-6">
-                        note: an .env file briefly ended up in a public commit early on. I rotated every exposed key
-                        within the hour and added a pre-commit check to catch it going forward.
+                        note: two early commits had an API key hard-coded in source. The key has been rotated, and CI
+                        now fails on hard-coded keys, committed .env files, or anything secret-shaped in the built bundle.
                     </p>
+                </section>
+
+                {{-- Engineering --}}
+                <section class="mb-16">
+                    <div class="font-mono text-sm text-[var(--color-tangerine)] mb-4">// what I'd point a reviewer at</div>
+                    <ul class="space-y-4 text-white/70 leading-relaxed">
+                        <li class="flex gap-3">
+                            <span style="color: var(--color-leaf);">&gt;</span>
+                            <span><span class="text-white">Closing an open relay.</span> An audit found the original proxies forwarded <em>any</em> endpoint with my key attached and allowed every origin. The fix was an allow-list guard plus a CI test that fails if any route forwards a caller-supplied endpoint without it.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span style="color: var(--color-leaf);">&gt;</span>
+                            <span><span class="text-white">Tests that are proven to catch regressions.</span> 260+ unit and feature tests (Vitest + Testing Library), fully offline. Key ones were checked by reintroducing the bug they guard against and confirming the suite failed.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span style="color: var(--color-leaf);">&gt;</span>
+                            <span><span class="text-white">CI as the safety net.</span> GitHub Actions runs lint, the tests, a build with no secrets present, and a scan of the built bundle for anything secret-shaped, on every push.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span style="color: var(--color-leaf);">&gt;</span>
+                            <span><span class="text-white">A race-safe data hook.</span> The shared <code class="font-mono text-sm">useFetch</code> hook ignores responses for arguments that are no longer current, so switching leagues quickly can't show the wrong table.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span style="color: var(--color-leaf);">&gt;</span>
+                            <span><span class="text-white">Written down.</span> A <code class="font-mono text-sm">docs/</code> folder covers the architecture (with a diagram), every API route, setup, testing, the security threat model, eleven decision records with their trade-offs, and maintenance runbooks.</span>
+                        </li>
+                    </ul>
                 </section>
 
                 {{-- Screenshots --}}
@@ -122,15 +138,14 @@
 
                     @php
                         $apexShots = [
-                            ['src' => 'apex-10.webp', 'alt' => 'APEX football dashboard showing live Premier League standings', 'caption' => 'Football &mdash; live Premier League standings, season recap, and league leaders'],
+                            ['src' => 'apex-10.webp', 'alt' => 'APEX football dashboard showing live Premier League standings', 'caption' => 'Football &mdash; live Premier League standings and league leaders'],
                             ['src' => 'apex-11.webp', 'alt' => 'APEX football dashboard showing upcoming Premier League fixtures', 'caption' => 'Football &mdash; upcoming fixtures with kickoff times and dates'],
                             ['src' => 'apex-13.webp', 'alt' => 'APEX Arsenal FC squad modal showing full player roster by position', 'caption' => 'Football &mdash; full squad rosters, drilled down by position, nationality, and age'],
                             ['src' => 'apex-14.webp', 'alt' => 'APEX Formula 1 dashboard showing live drivers\' and constructors\' championship standings', 'caption' => 'F1 &mdash; live drivers\' and constructors\' championships, plus a countdown to the next race'],
                             ['src' => 'apex-15.webp', 'alt' => 'APEX MMA dashboard showing recent UFC results and the next fight card', 'caption' => 'MMA &mdash; recent results, title fights, and the next UFC card'],
-                            ['src' => 'apex-17.webp', 'alt' => 'APEX boxing dashboard showing undisputed champions and recent title fights', 'caption' => 'Boxing &mdash; undisputed champions and recent title fights (curated, not live)'],
+                            ['src' => 'apex-17.webp', 'alt' => 'APEX boxing dashboard showing undisputed champions and recent title fights', 'caption' => 'Boxing &mdash; world champions by division (snapshot, refreshed from Wikipedia)'],
                             ['src' => 'apex-18.webp', 'alt' => 'APEX rugby dashboard showing Six Nations, URC, and Premiership standings', 'caption' => 'Rugby &mdash; Six Nations, URC, and Premiership standings'],
-                            ['src' => 'apex-19.webp', 'alt' => 'APEX WRC dashboard showing 2026 driver standings and rally calendar', 'caption' => 'WRC &mdash; 2026 driver standings and the full rally calendar'],
-                            ['src' => 'apex-8.webp', 'alt' => 'APEX admin CMS panel for editing hero, season recap, and story content', 'caption' => 'Admin CMS &mdash; editing hero, season recap, and story content per sport'],
+                            ['src' => 'apex-19.webp', 'alt' => 'APEX WRC dashboard showing 2026 driver standings and rally calendar', 'caption' => 'WRC &mdash; driver standings and the full rally calendar'],
                         ];
                     @endphp
 
@@ -153,7 +168,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="font-mono text-xs text-white/30 px-1 mt-2">click the dots to browse &mdash; all six sports, the squad drill-down, and the admin CMS behind them all</p>
+                    <p class="font-mono text-xs text-white/30 px-1 mt-2">click the dots to browse &mdash; all six sports and the squad drill-down</p>
 
                     <script>
                         (function () {
@@ -200,7 +215,8 @@
 
                 <p class="text-white/40 text-sm">
                     Live at <a href="https://sports-dashboard-redfang.vercel.app" target="_blank" rel="noopener" class="underline" style="color: var(--color-tangerine);">sports-dashboard-redfang.vercel.app</a>
-                    &mdash; source on <a href="https://github.com/redfang854/sports-dashboard" target="_blank" rel="noopener" class="underline" style="color: var(--color-tangerine);">GitHub</a>.
+                    &mdash; source and docs on <a href="https://github.com/redfang854/sports-dashboard" target="_blank" rel="noopener" class="underline" style="color: var(--color-tangerine);">GitHub</a>
+                    (<a href="https://github.com/redfang854/sports-dashboard/tree/main/docs" target="_blank" rel="noopener" class="underline" style="color: var(--color-tangerine);">architecture &amp; decisions</a>).
                 </p>
 
             </article>
