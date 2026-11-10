@@ -23,7 +23,7 @@
             <header class="fixed top-0 inset-x-0 z-50 glass-nav">
                 <nav class="w-full px-6 sm:px-10 h-16 flex items-center justify-between">
                     <a href="{{ url('/') }}" class="font-mono text-sm text-white/90 tracking-tight">
-                        <span class="text-[var(--color-tangerine)]">~</span>/brian-hinga
+                        <img src="{{ asset('images/bh-logo.svg') }}" alt="Brian Hinga" width="40" height="48" class="h-12 w-auto">
                     </a>
                     <a href="{{ url('/#projects') }}" class="font-mono text-[13px] text-white/60 hover:text-white transition-colors">&larr; all projects</a>
                 </nav>

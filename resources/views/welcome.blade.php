@@ -30,7 +30,7 @@
             <header class="fixed top-0 inset-x-0 z-50 glass-nav">
                 <nav class="w-full px-6 sm:px-10 h-16 grid grid-cols-[1fr_auto_1fr] items-center">
                     <a href="#top" class="justify-self-start font-mono text-sm text-white/90 tracking-tight">
-                        <span class="text-[var(--color-tangerine)]">~</span>/brian-hinga
+                        <img src="{{ asset('images/bh-logo.svg') }}" alt="Brian Hinga" width="40" height="48" class="h-12 w-auto">
                     </a>
                     <div class="hidden md:flex items-center gap-[90px] font-mono text-[13px] text-white/60 justify-self-center">
                         <a href="#about" class="hover:text-white transition-colors">about</a>
